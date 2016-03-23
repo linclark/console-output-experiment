@@ -39,24 +39,23 @@ const mapDispatchToProps = (dispatch) => {
 
   function dispatchMessageFromRDP(packet) {
     let {type} = packet;
-    if (type === "consoleAPICall") {
-      let message = prepareMessageInput("ConsoleGeneric", packet);
-      dispatch(messageAdd(message))
+    let message;
+    switch (type) {
+      case "consoleAPICall":
+        message = prepareMessageInput("ConsoleGeneric", packet);
+        break;
+      case "pageError":
+        message = prepareMessageInput("ConsoleService", packet);
+        break;
+      case "evaluationResult":
+        message = prepareMessageInput("JavaScriptEvalOutput", packet);
+        break;
+      case "networkEvent":
+        // @TODO: Implement network event log
+      case "networkEvenUpdate":
+        // @TODO: Implement network event log
     }
-    if (type === "pageError") {
-      let message = prepareMessageInput("ConsoleService", packet);
-      dispatch(messageAdd(message))
-    }
-    if (type === "evaluationResult") {
-      let message = prepareMessageInput("JavaScriptEvalOutput", packet);
-      dispatch(messageAdd(message))
-    }
-    if (type === "networkEvent") {
-      // @TODO: Implement network event log
-    }
-    if (type === "networkEventUpdate") {
-      // @TODO: Implement network event log
-    }
+    dispatch(messageAdd(message));
   }
 
   return {
