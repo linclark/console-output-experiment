@@ -83,6 +83,10 @@ export function prepareMessageInput(messageType, packet) {
       // @TODO use proper severity for console service messages
       message.severity = "error";
       break;
+    case "ConsoleTable":
+      message = packet.message;
+      message.severity = SEVERITY_CLASS_FRAGMENTS[LEVELS[message.level]];
+      break;
   }
 
   message.uniqueID = uniqueID++;

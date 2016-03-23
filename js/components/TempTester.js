@@ -14,6 +14,9 @@ class TempTester extends Component {
         <button data-messagetype="ConsoleGeneric" data-nummessages="1000" onClick={this.props.outputMessages}>
           Bunch of ConsoleGenerics
         </button>
+        <button data-messagetype="ConsoleTable" onClick={this.props.outputMessages}>
+          ConsoleTable
+        </button>
         <button data-messagetype="JavaScriptEvalOutput" data-objecttype="Date" onClick={this.props.outputMessages}>
           Simulate `new Date()` JS eval
         </button>
@@ -42,7 +45,13 @@ const mapDispatchToProps = (dispatch) => {
     let message;
     switch (type) {
       case "consoleAPICall":
-        message = prepareMessageInput("ConsoleGeneric", packet);
+        switch (packet.message.level) {
+          case "table":
+            message = prepareMessageInput("ConsoleTable", packet);
+            break
+          default:
+            message = prepareMessageInput("ConsoleGeneric", packet);
+        }
         break;
       case "pageError":
         message = prepareMessageInput("ConsoleService", packet);
